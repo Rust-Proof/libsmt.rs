@@ -264,7 +264,6 @@ impl<L: Logic> SMTBackend for SMTLib2<L> {
                 // the SMT solver. Need to look into the reason for this. This might stop
                 // working in the
                 // future.
-                let _ = smt_proc.read();
                 let read_result = smt_proc.read_getmodel_output();
                 let re = Regex::new(r"\s+\(define-fun (?P<var>[0-9a-zA-Z_]+) \(\) [(]?[ _a-zA-Z0-9]+[)]?\n\s+(?P<val>([0-9]+|#x[0-9a-f]+|#b[01]+))")
                              .unwrap();
