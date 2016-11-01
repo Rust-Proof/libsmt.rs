@@ -16,14 +16,14 @@
 //   mov [rax], rsi
 //   ret
 
-extern crate libsmt;
+extern crate rustproof_libsmt;
 
-use libsmt::backends::smtlib2::*;
-use libsmt::backends::backend::*;
-use libsmt::backends::z3;
-use libsmt::theories::{array_ex, bitvec, core};
-use libsmt::logics::qf_abv::QF_ABV;
-use libsmt::logics::qf_abv;
+use rustproof_libsmt::backends::smtlib2::*;
+use rustproof_libsmt::backends::backend::*;
+use rustproof_libsmt::backends::z3;
+use rustproof_libsmt::theories::{array_ex, bitvec, core};
+use rustproof_libsmt::logics::qf_abv::QF_ABV;
+use rustproof_libsmt::logics::qf_abv;
 
 macro_rules! bv_const {
     ($solver: ident, $i: expr, $n: expr) => { $solver.new_const(bitvec::OpCodes::Const($i, $n)) }
@@ -62,7 +62,7 @@ fn main() {
     };
 
     // Adding constraints based on the above asm.
-    
+
     // Reset memory to 0
     solver.assert(core::OpCodes::Cmp, &[mem, const_mem_0]);
     // We know that the return address is at rbp + 0x4
@@ -83,7 +83,7 @@ fn main() {
     solver.assert(core::OpCodes::Cmp, &[sel, const_badcafe]);
 
     // Check if we have a satisfying solution.
-    if let Ok(result) = solver.solve(&mut z3) {
+    if let (Ok(result), _) = solver.solve(&mut z3, false) {
         println!("Out-Of-Bounds Write detected!");
         println!("rdi: 0x{:x}; rsi: 0x{:x};", result[&rdi], result[&rsi]);
     } else {

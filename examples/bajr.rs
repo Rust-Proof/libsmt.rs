@@ -15,21 +15,21 @@
 // (assert (> x 1))
 // (assert (> y 1))
 
-// The libsmt library is designed to simplify this process of interacting with Z3 and enable to do so programmatically through Rust
+// The rustproof_libsmt library is designed to simplify this process of interacting with Z3 and enable to do so programmatically through Rust
 
 
-// Import the libsmt library
-extern crate libsmt;
+// Import the rustproof_libsmt library
+extern crate rustproof_libsmt;
 
-use libsmt::backends::smtlib2::*;
-use libsmt::backends::backend::*;
-use libsmt::backends::z3;
+use rustproof_libsmt::backends::smtlib2::*;
+use rustproof_libsmt::backends::backend::*;
+use rustproof_libsmt::backends::z3;
 
 // Include the Int theory and its functions
-use libsmt::theories::{core,integer};
+use rustproof_libsmt::theories::{core,integer};
 
 // Include the LIA logic
-use libsmt::logics::lia::LIA;
+use rustproof_libsmt::logics::lia::LIA;
 
 fn main() {
 
@@ -51,7 +51,7 @@ fn main() {
     // Defining the assert conditions
     //let cond1 = solver.assert(integer::OpCodes::Add, &[x, y]);
     //let _  = solver.assert(integer::OpCodes::Gt, &[cond1, int5]);
-    //let _  = solver.assert(integer::OpCodes::Gt, &[x, int1]); 
+    //let _  = solver.assert(integer::OpCodes::Gt, &[x, int1]);
     //let _  = solver.assert(integer::OpCodes::Gt, &[y, bool1]);
     //let _  = solver.assert(integer::OpCodes::Lt, &[x, int5]);
     let _ = solver.assert(core::OpCodes::And, &[bool1, bool1]);
@@ -62,7 +62,7 @@ fn main() {
 //          SMTRes::Error(..) => { println!("{}", z3.read()); },
 //      }
 
-    let (res, check) = solver.solve(&mut z3);
+    let (res, check) = solver.solve(&mut z3, false);
     match res {
         Ok(..) => {
             match check {

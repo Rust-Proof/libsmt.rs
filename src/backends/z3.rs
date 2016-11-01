@@ -67,7 +67,8 @@ mod test {
         let c = solver.new_const(integer::OpCodes::Const(10));
         solver.assert(core::OpCodes::Cmp, &[x, c]);
         solver.assert(integer::OpCodes::Gt, &[x, y]);
-        let result = solver.solve(&mut z3).unwrap();
+        let (result, _) = solver.solve(&mut z3, false);
+        let result = result.unwrap();
         assert_eq!(result[&x], 10);
         assert_eq!(result[&y], 9);
     }
@@ -83,7 +84,8 @@ mod test {
         solver.assert(core::OpCodes::Cmp, &[x, c]);
         let x_xor_y = solver.assert(bitvec::OpCodes::BvXor, &[x, y]);
         solver.assert(core::OpCodes::Cmp, &[x_xor_y, c8]);
-        let result = solver.solve(&mut z3).unwrap();
+        let (result, _) = solver.solve(&mut z3, false);
+        let result = result.unwrap();
         assert_eq!(result[&x], 10);
         assert_eq!(result[&y], 2);
     }
@@ -96,7 +98,8 @@ mod test {
         let c4 = solver.new_const(bitvec::OpCodes::Const(0b100, 4));
         let x_31_28 = solver.assert(bitvec::OpCodes::Extract(31, 28), &[x]);
         solver.assert(core::OpCodes::Cmp, &[x_31_28, c4]);
-        let result = solver.solve(&mut z3).unwrap();
+        let (result, _) = solver.solve(&mut z3, false);
+        let result = result.unwrap();
         assert_eq!(result[&x], (0b100 << 28));
     }
 }

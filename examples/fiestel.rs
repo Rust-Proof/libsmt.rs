@@ -3,14 +3,14 @@
 // Though Z3 was unable to solve the 17 round fiestel network that was a part of the
 // challenge, this serves as a good example for the usage of this library.
 
-#[macro_use] extern crate libsmt;
+#[macro_use] extern crate rustproof_libsmt;
 
-use libsmt::backends::smtlib2::*;
-use libsmt::backends::backend::*;
-use libsmt::backends::z3;
-use libsmt::theories::{bitvec, core};
-use libsmt::logics::qf_abv::QF_ABV;
-use libsmt::logics::qf_abv;
+use rustproof_libsmt::backends::smtlib2::*;
+use rustproof_libsmt::backends::backend::*;
+use rustproof_libsmt::backends::z3;
+use rustproof_libsmt::theories::{bitvec, core};
+use rustproof_libsmt::logics::qf_abv::QF_ABV;
+use rustproof_libsmt::logics::qf_abv;
 
 fn main() {
 
@@ -50,7 +50,7 @@ fn main() {
     let _ = solver.assert(core::OpCodes::Cmp, &[rt, rt_const]);
 
     // Print the required keys.
-    if let Ok(result) = solver.solve(&mut z3) {
+    if let (Ok(result), _) = solver.solve(&mut z3, false) {
         println!("LK: {:x}; RK: {:x}", result[&lk], result[&rk]);
     } else {
         println!("No Solution.");
